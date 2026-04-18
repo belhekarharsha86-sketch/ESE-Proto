@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI';
+      background: #f4f7fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #999;
+    }
+
+    button {
+      background: #2a5298;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .toggle {
+      color: blue;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h2 id="title">Login</h2>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="handle()">Submit</button>
+
+  <p class="toggle" onclick="toggle()">Switch to Register</p>
+
+</div>
+
+<script>
+  let isLogin = true;
+
+  // 🔥 Set title based on role
+  const role = localStorage.getItem("role");
+
+  if (role === "college") {
+    document.getElementById("title").innerText = "College Login";
+  } else {
+    document.getElementById("title").innerText = "Sponsor Login";
+  }
+
+  function toggle() {
+    isLogin = !isLogin;
+
+    if (isLogin) {
+      document.getElementById("title").innerText =
+        role === "college" ? "College Login" : "Sponsor Login";
+      document.querySelector(".toggle").innerText = "Switch to Register";
+    } else {
+      document.getElementById("title").innerText =
+        role === "college" ? "College Register" : "Sponsor Register";
+      document.querySelector(".toggle").innerText = "Switch to Login";
+    }
+  }
+
+  function handle() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!email || !password) {
+      alert("Fill all fields");
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (isLogin) {
+      const user = users.find(u =>
+        u.email === email &&
+        u.password === password &&
+        u.role === role
+      );
+
+      if (user) {
+        alert("Login Successful");
+
+        if (role === "college") {
+          window.location.href = "603.html";
+        } else {
+          window.location.href = "Spn.html";
+        }
+
+      } else {
+        alert("Invalid credentials");
+      }
+
+    } else {
+      users.push({ role, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+      alert("Registered Successfully");
+    }
+  }
+</script>
+
+</body>
+</html>

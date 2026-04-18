@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirmation</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI';
+      background: #f4f7fb;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: green;
+    }
+
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: 20px auto;
+      border: 1px solid #ccc;
+    }
+
+    a {
+      text-decoration: none;
+      background: #2a5298;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>✅ Sponsorship Confirmed</h1>
+
+<div class="box" id="summaryBox"></div>
+
+<a href="603.html">Back to Dashboard</a>
+
+<script>
+  const events = JSON.parse(localStorage.getItem('events')) || [];
+  const index = localStorage.getItem("selectedEventIndex");
+
+  const selected = events[index];
+
+  if (selected) {
+    document.getElementById('summaryBox').innerHTML = `
+      <h3>${selected.title}</h3>
+      <p>🏫 ${selected.college}</p>
+      <p>📌 ${selected.type} | 📍 ${selected.location}</p>
+      <p>📅 ${selected.date}</p>
+      <p>👥 Audience: ${selected.audience}</p>
+      <p>💰 ₹${selected.budget}</p>
+
+      <hr>
+
+      <p><strong>✔ Sponsor has been successfully assigned</strong></p>
+    `;
+  } else {
+    document.getElementById('summaryBox').innerHTML =
+      "<p>No event data found</p>";
+  }
+</script>
+
+</body>
+</html>
