@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>College Dashboard</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI';
+      background: #f4f7fb;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .back {
+      text-decoration: none;
+      background: #2a5298;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 8px;
+    }
+
+    .form-box {
+      max-width: 500px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+    }
+
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .clear-btn {
+      background: #f44336;
+    }
+
+    .events {
+      margin-top: 30px;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      background: white;
+    }
+
+    .card button {
+      background: #ff9800;
+    }
+  </style>
+</head>
+
+<body>
+
+<a href="602.html" class="back">← Back</a>
+
+<h1>🎓 College Dashboard</h1>
+
+<!-- Event Form -->
+<div class="form-box">
+  <h2>Create Event</h2>
+
+  <input type="text" id="title" placeholder="Event Name">
+  <input type="text" id="college" placeholder="College Name">
+
+  <select id="type">
+    <option value="">Event Type</option>
+    <option>Tech</option>
+    <option>Cultural</option>
+    <option>Sports</option>
+  </select>
+
+  <input type="text" id="location" placeholder="Location">
+  <input type="date" id="date">
+  <input type="number" id="audience" placeholder="Audience Size">
+  <input type="number" id="budget" placeholder="Budget">
+
+  <input type="text" id="proposal" placeholder="Sponsorship Proposal">
+
+  <button onclick="addEvent()">Add Event</button>
+  <button class="clear-btn" onclick="clearAll()">Clear Old Data</button>
+</div>
+
+<!-- Events List -->
+<div class="events" id="eventList"></div>
+
+<script>
+  function addEvent() {
+
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+
+    const title = document.getElementById('title').value;
+    const college = document.getElementById('college').value;
+    const type = document.getElementById('type').value;
+    const location = document.getElementById('location').value;
+    const date = document.getElementById('date').value;
+    const audience = document.getElementById('audience').value;
+    const budget = document.getElementById('budget').value;
+    const proposal = document.getElementById('proposal').value;
+
+    if (!title || !college || !type || !location || !date || !audience || !budget || !proposal) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    const event = { title, college, type, location, date, audience, budget, proposal };
+
+    events.push(event);
+
+    localStorage.setItem('events', JSON.stringify(events));
+
+    displayEvents();
+    clearForm();
+  }
+
+  function displayEvents() {
+
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+
+    const container = document.getElementById('eventList');
+    container.innerHTML = "";
+
+    events.forEach((e, index) => {
+      container.innerHTML += `
+        <div class="card">
+          <h3>${e.title}</h3>
+          <p>🏫 ${e.college}</p>
+          <p>📌 ${e.type} | 📍 ${e.location}</p>
+          <p>📅 ${e.date}</p>
+          <p>👥 Audience: ${e.audience}</p>
+          <p>💰 ₹${e.budget}</p>
+          <p>📄 ${e.proposal}</p>
+
+          <button onclick="goToSponsors(${index})">Find Sponsors</button>
+        </div>
+      `;
+    });
+  }
+
+  function goToSponsors(index) {
+    localStorage.setItem("selectedEventIndex", index);
+    window.location.href = "604.html";
+  }
+
+  function clearForm() {
+    document.getElementById('title').value = '';
+    document.getElementById('college').value = '';
+    document.getElementById('type').value = '';
+    document.getElementById('location').value = '';
+    document.getElementById('date').value = '';
+    document.getElementById('audience').value = '';
+    document.getElementById('budget').value = '';
+    document.getElementById('proposal').value = '';
+  }
+
+  function clearAll() {
+    if (confirm("Delete all events?")) {
+      localStorage.removeItem('events');
+      displayEvents();
+    }
+  }
+
+  displayEvents();
+</script>
+
+</body>
+</html>
